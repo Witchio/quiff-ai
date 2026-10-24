@@ -6,7 +6,7 @@
 
 ## Focus
 
-Improves product quality and release confidence for the login/signup app.
+Improves product quality and release confidence for the signup app.
 
 ## Responsibilities
 

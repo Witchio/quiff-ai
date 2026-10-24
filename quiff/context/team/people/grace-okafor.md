@@ -6,7 +6,7 @@
 
 ## Focus
 
-Reduces security risk in the login/signup app and its delivery practices.
+Reduces security risk in the signup app and its delivery practices.
 
 ## Responsibilities
 

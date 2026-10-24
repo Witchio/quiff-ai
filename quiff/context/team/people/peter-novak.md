@@ -6,7 +6,7 @@
 
 ## Focus
 
-Provides legal guidance for company operations and the login/signup app.
+Provides legal guidance for company operations and the signup app.
 
 ## Responsibilities
 

@@ -6,11 +6,11 @@
 
 ## Focus
 
-Builds the login/signup app's user interface.
+Builds the signup app's user interface.
 
 ## Responsibilities
 
-- Implement responsive login and signup screens.
+- Implement responsive signup screens.
 - Maintain accessible form behavior and user feedback.
 - Integrate the interface with application APIs.
 

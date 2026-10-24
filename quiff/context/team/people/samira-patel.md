@@ -6,7 +6,7 @@
 
 ## Focus
 
-Builds and maintains services and APIs for the login/signup app.
+Builds and maintains services and APIs for the signup app.
 
 ## Responsibilities
 

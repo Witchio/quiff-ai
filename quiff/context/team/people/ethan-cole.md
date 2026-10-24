@@ -6,7 +6,7 @@
 
 ## Focus
 
-Helps customers adopt and get value from the login/signup app.
+Helps customers adopt and get value from the signup app.
 
 ## Responsibilities
 

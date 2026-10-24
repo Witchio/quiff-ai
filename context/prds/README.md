@@ -4,7 +4,7 @@ PRDs describe user needs, scope, and observable behavior. Keep one file per mean
 
 ## PRDs
 
-- [Minimal login page](login-page.md) — initial demo login experience.
+- [Signup form](signup-form.md) — signup form and server-side payload validation.
 
 ## Writing a PRD
 
@@ -14,4 +14,4 @@ PRDs describe user needs, scope, and observable behavior. Keep one file per mean
 4. Call out exclusions and unresolved questions explicitly.
 5. Update this index when adding a PRD.
 
-The [product vision](../product-vision.md) describes the overall direction. Add a focused PRD for each block as it is selected for implementation.
+Add a focused PRD here for each signup feature as it is selected for implementation.

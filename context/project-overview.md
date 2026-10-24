@@ -2,15 +2,15 @@
 
 ## What this project does
 
-The login/signup app currently has a small Next.js login demo that validates a fixed demo credential pair on the server and displays either a success screen or an error message.
+The app presents a signup form for a username, email address, password, and password confirmation. The browser and server validate the submitted values. A successful request receives an acknowledgment, but no account is created or stored.
 
 ## Current scope
 
-- Username and password form.
-- Server-side check for username `admin` and password `admin`.
-- Success state after valid credentials.
-- Inline error state after invalid credentials or a failed request.
-- No account database, session, cookie, or persistent authentication.
+- Signup form with username, email, password, and password confirmation.
+- Minimum length of 8 characters for username and password, checked in both the browser and server.
+- Email format and matching password confirmation checks.
+- Accessible field-level errors, server errors, loading state, and submission acknowledgment.
+- No account database, session, cookie, or persistent signup data.
 
 ## Run locally
 
@@ -19,15 +19,15 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Next.js. Use `admin` for both fields to see the success state.
+Open the local URL printed by Next.js and submit valid signup details to see the acknowledgment state.
 
 ## Important limitation
 
-The fixed credentials are demonstration-only. This app is not suitable for protecting real data or production access. There is no session creation, access control, rate limiting, or user management.
+This is a signup form demo, not an account system. Submissions are not persisted, and the app does not create accounts, sessions, or cookies. It is not suitable for production signup or account access.
 
 ## Source map
 
-- `app/(login)/page.tsx` — login form and success/error UI.
-- `app/(login)/api/login/route.ts` — server-side credential validation endpoint; the public URL is `/api/login`.
+- `app/(signup)/page.tsx` — signup form and success/error UI.
+- `app/(signup)/api/signup/route.ts` — server-side signup payload validation; the public URL is `/api/signup`.
 - `app/layout.tsx` — root document and metadata.
 - `app/globals.css` — page styling.

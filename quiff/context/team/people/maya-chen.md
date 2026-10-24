@@ -6,7 +6,7 @@
 
 ## Focus
 
-Sets company direction and priorities for the login/signup app.
+Sets company direction and priorities for the signup app.
 
 ## Responsibilities
 

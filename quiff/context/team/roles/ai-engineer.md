@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Explore and build AI capabilities that improve the login/signup app, with results that users and engineers can inspect and trust.
+Explore and build AI capabilities that improve the signup app, with results that users and engineers can inspect and trust.
 
 ## Example responsibilities
 
