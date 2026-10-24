@@ -21,7 +21,7 @@ function getErrors(values: FormValues): FormErrors {
   const passwordLength = Array.from(values.password).length;
 
   if (!values.username.trim()) errors.username = 'Enter a username.';
-  else if (usernameLength < 6) errors.username = 'Username must be at least 6 characters.';
+  else if (usernameLength < 8) errors.username = 'Username must be at least 8 characters.';
   else if (usernameLength > 64) errors.username = 'Username must be 64 characters or fewer.';
 
   if (!values.email.trim()) errors.email = 'Enter your email address.';
@@ -158,12 +158,12 @@ export default function SignupPage() {
                   value={values.username}
                   onChange={(event) => updateField('username', event.target.value)}
                   placeholder="Choose a username"
-                  minLength={6}
+                  minLength={8}
                   required
                   aria-invalid={Boolean(errors.username)}
                   aria-describedby={errors.username ? 'username-error' : 'username-help'}
                 />
-                {errors.username ? <p className="field-error" id="username-error">{errors.username}</p> : <p className="field-help" id="username-help">At least 6 characters</p>}
+                {errors.username ? <p className="field-error" id="username-error">{errors.username}</p> : <p className="field-help" id="username-help">At least 8 characters</p>}
               </div>
 
               <div className="field-group">
