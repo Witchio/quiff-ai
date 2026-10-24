@@ -7,7 +7,7 @@ The app presents a signup form for a username, email address, password, and pass
 ## Current scope
 
 - Signup form with username, email, password, and password confirmation.
-- Minimum length of 8 characters for username and password, checked in both the browser and server.
+- Minimum length of 8 characters for usernames and 10 characters for passwords, checked in both the browser and server.
 - Email format and matching password confirmation checks.
 - Accessible field-level errors, server errors, loading state, and submission acknowledgment.
 - No account database, session, cookie, or persistent signup data.
