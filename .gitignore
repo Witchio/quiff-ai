@@ -6,5 +6,3 @@
 *.tsbuildinfo
 next-env.d.ts
 
-# Kane CLI run evidence packs (replay artifacts stay trackable)
-.testmuai/evidence/

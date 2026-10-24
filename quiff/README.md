@@ -1,13 +1,22 @@
-# Quiff code area
+# Quiff CI/CD check
 
-Quiff is a developer tool and is separate from the login/signup app.
+Quiff is the Kane-based CI/CD check for the login/signup app. Its check definitions, tickets, team context, and pipeline files live under this directory.
 
-## Boundary
+## Isolation boundary
 
-- Login/signup routes and UI live in `app/(login)/`.
-- Quiff-specific implementation belongs in this top-level `quiff/` area. If Quiff later needs Next.js pages or API routes, put those in a dedicated `app/(quiff)/` route group and keep Quiff domain logic here.
-- Do not put Quiff behavior in login/signup components, routes, or services. Shared code should be extracted to an explicitly named shared module only when both products need it.
+- The login/signup app owns the root `app/`, `context/`, and root `package.json`.
+- Kane tests and their run state live in `quiff/.testmuai/`.
+- Mock work tickets and company roster context used by the check live in `quiff/tickets/` and `quiff/context/team/`.
+- Quiff product context and local pipeline files live in `quiff/context/` and `quiff/ci/`.
+- The pipeline builds the login/signup app as its test target, then runs Kane from the `quiff/` working directory. The app package does not define or invoke Kane commands.
 
-## Current status
+## Run the check
 
-This directory currently contains documentation only. No Quiff runtime code has been implemented.
+With Docker and an authenticated `kane-cli` installation available, run from the repository root:
+
+```bash
+npm --prefix quiff run test:kane
+npm --prefix quiff run pipeline:local
+```
+
+The local pipeline builds the login/signup app image, starts it on port 3000, waits for it to respond, runs saved Kane tests, and removes its temporary container.

@@ -1,12 +1,11 @@
 {
-  "name": "quiff-ai",
+  "name": "login-signup-app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "test:kane": "KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless < /dev/null"
+    "start": "next start"
   },
   "dependencies": {
     "next": "^15.0.0",

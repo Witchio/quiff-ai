@@ -27,7 +27,7 @@ Reduce the time an engineer spends connecting a release-time CI/CD failure to th
 - The company team builds and maintains the login/signup product.
 - Quiff is an additional developer tool built by that same team, using their product and engineering context.
 - The current repository contains a minimal login page demo; it does not yet implement the full login/signup product or the Quiff workflow described above.
-- Tickets are initially mock Markdown files local to the repository.
+- Tickets are mock Markdown files in `quiff/tickets/`.
 - Kane CLI runs are the initial source of failure data.
 - Slack is the initial notification destination.
 - OpenAI is used to identify relevant context from the gathered failure and source trail.

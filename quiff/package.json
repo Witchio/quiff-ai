@@ -1,0 +1,9 @@
+{
+  "name": "quiff-ci-check",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test:kane": "KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless < /dev/null",
+    "pipeline:local": "bash ci/pipeline-local.sh"
+  }
+}

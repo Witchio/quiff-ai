@@ -1,8 +1,11 @@
-# Project context index
+# Login/signup app context
 
-Product context is separated by purpose:
+This directory contains project context for the login/signup app only.
 
-- [`company/`](company/README.md) contains context for the login/signup app and its company team.
-- [`quiff/`](quiff/README.md) contains context for the separate developer tool.
+## Contents
 
-Keep product-specific notes in the matching directory. Do not put developer-tool context in company app or team files.
+- [Project overview](project-overview.md): current app behavior, scope, and limitations.
+- [Architecture](architecture.md): frontend/backend split and request flow.
+- [Product requirements](prds/README.md): PRD index and authoring guidance.
+
+Keep app requirements and implementation notes here.
