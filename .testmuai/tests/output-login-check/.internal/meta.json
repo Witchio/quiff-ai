@@ -5,5 +5,23 @@
   "project_id": "01M5QNPWEMVHVA0YX2Z2QBWSVH",
   "folder_id": "01M5QNPWRP8BVHB7QT2SRBQQH5",
   "org_id": "3398220",
-  "session_name": "login-check"
+  "session_name": "login-check",
+  "executions": [
+    {
+      "execution_id": "c9c1625e-05c5-45ac-b64f-20df16e6e19b",
+      "run_kind": "replay",
+      "status": "passed",
+      "valid": true,
+      "uploaded": true,
+      "at": "2026-10-24T19:36:03.067Z"
+    },
+    {
+      "execution_id": "a0455369-fe10-4a15-b02f-71b924c9f0d5",
+      "run_kind": "replay",
+      "status": "passed",
+      "valid": true,
+      "uploaded": true,
+      "at": "2026-10-24T19:39:57.146Z"
+    }
+  ]
 }
