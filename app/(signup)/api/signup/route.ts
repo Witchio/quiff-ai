@@ -33,8 +33,8 @@ export async function POST(request: Request) {
   if (!username) {
     return NextResponse.json({ message: 'Enter a username.' }, { status: 400 });
   }
-  if (characterCount(username) < 10) {
-    return NextResponse.json({ message: 'Username must be at least 10 characters.' }, { status: 400 });
+  if (characterCount(username) < 8) {
+    return NextResponse.json({ message: 'Username must be at least 8 characters.' }, { status: 400 });
   }
   if (characterCount(username) > 64) {
     return NextResponse.json({ message: 'Username must be 64 characters or fewer.' }, { status: 400 });
