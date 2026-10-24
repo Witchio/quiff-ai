@@ -17,5 +17,5 @@ Before sending a signup request, check that both username and password contain a
 
 ## Source trail
 
-- Related pull request: TBD
+- Related pull request: https://github.com/Witchio/quiff-ai/pull/2
 - Related commit: TBD
