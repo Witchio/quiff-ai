@@ -16,4 +16,12 @@ npm run dev
 
 Use `admin` for both username and password. This demo creates no session and stores no account data. The hard-coded credentials are intended for local demonstration only.
 
-Project context, architecture notes, and PRDs live in [`context/`](context/README.md). See [`quiff/README.md`](quiff/README.md) for the code boundary between the two products.
+Project context is separated by product: [`context/company/`](context/company/README.md) covers the login/signup app and its team, while [`context/quiff/`](context/quiff/README.md) covers the developer tool. Login/signup code lives in `app/(login)/`; Quiff code belongs in `quiff/`.
+
+## Run Kane tests
+
+With `kane-cli` installed and authenticated, run all saved Kane tests from the project root:
+
+```bash
+npm run test:kane
+```
