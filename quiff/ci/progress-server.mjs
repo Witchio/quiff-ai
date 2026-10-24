@@ -18,9 +18,15 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === 'POST' && request.url === '/update') {
     let body = '';
-    for await (const chunk of request) body += chunk;
+    for await (const chunk of request) {
+      body += chunk;
+      if (body.length > 1024 * 1024) {
+        response.writeHead(413).end('Update too large');
+        return;
+      }
+    }
     try {
-      latest = JSON.parse(body);
+      latest = { ...latest, ...JSON.parse(body) };
       for (const client of clients) client.write(`data: ${JSON.stringify(latest)}\n\n`);
       response.writeHead(204).end();
     } catch {
