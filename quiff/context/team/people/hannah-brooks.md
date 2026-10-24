@@ -16,4 +16,4 @@ Supports employees and people practices across the company.
 
 ## Collaboration
 
-Works with all departments on people matters; does not own login/signup product decisions.
+Works with all departments on people matters; does not own signup product decisions.

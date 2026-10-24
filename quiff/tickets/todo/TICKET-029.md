@@ -1,18 +1,19 @@
-# TICKET-029: Create an authentication release checklist
+# TICKET-029: Create a signup release checklist
 
 **Team:** Release Management
 **Type:** Process
+**Assignee:** Noah Brooks
 **Status:** todo
 
 ## Description
 
-Standardize checks before authentication changes are released.
+Standardize the checks required before signup changes are released.
 
 ## Acceptance criteria
 
-- [ ] Cover critical journeys and rollback readiness
-- [ ] name sign-off owners
-- [ ] store with release process.
+- [ ] The checklist covers core signup journeys, accessibility, and rollback readiness.
+- [ ] Release sign-off owners are identified.
+- [ ] The checklist is stored with the release process.
 
 ## Source trail
 

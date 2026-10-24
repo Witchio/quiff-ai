@@ -1,6 +1,6 @@
-# Login/signup app context
+# Signup app context
 
-This directory contains project context for the login/signup app only.
+This directory contains project context for the signup app only.
 
 ## Contents
 

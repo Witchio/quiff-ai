@@ -6,7 +6,7 @@
 
 ## Focus
 
-Leads sales activity and customer relationships for the login/signup app.
+Leads sales activity and customer relationships for the signup app.
 
 ## Responsibilities
 

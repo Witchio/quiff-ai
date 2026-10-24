@@ -6,7 +6,7 @@
 
 ## Focus
 
-Builds end-to-end features for the login/signup app.
+Builds end-to-end features for the signup app.
 
 ## Responsibilities
 

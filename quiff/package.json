@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "test:kane": "KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless < /dev/null",
-    "pipeline:local": "bash ci/pipeline-local.sh"
+    "pipeline:local": "bash ci/pipeline-local.sh",
+    "test:slack": "bash ci/test-slack-webhook.sh"
   }
 }

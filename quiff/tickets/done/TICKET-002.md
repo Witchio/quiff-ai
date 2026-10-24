@@ -2,11 +2,12 @@
 
 **Team:** Frontend
 **Type:** Enhancement
+**Assignee:** Alex Morgan
 **Status:** done
 
 ## Description
 
-Let users reveal or conceal passwords on authentication forms.
+Let users reveal or conceal passwords on signup forms.
 
 ## Acceptance criteria
 

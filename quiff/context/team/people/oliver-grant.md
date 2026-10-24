@@ -6,7 +6,7 @@
 
 ## Focus
 
-Leads positioning and marketing for the login/signup app.
+Leads positioning and marketing for the signup app.
 
 ## Responsibilities
 

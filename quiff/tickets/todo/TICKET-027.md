@@ -1,18 +1,19 @@
-# TICKET-027: Add an account deletion request flow
+# TICKET-027: Add a privacy acknowledgment to signup
 
 **Team:** Engineering
 **Type:** Feature
+**Assignee:** Peter Novak
 **Status:** todo
 
 ## Description
 
-Let authenticated users request deletion of their account and personal data.
+Tell visitors how their signup details are handled before they submit the form.
 
 ## Acceptance criteria
 
-- [ ] Explain consequences
-- [ ] require confirmation
-- [ ] record request for handling under approved retention policy.
+- [ ] The notice clearly states what data is collected and whether it is stored.
+- [ ] Any required consent is separate from optional marketing consent.
+- [ ] Legal and product approve the wording.
 
 ## Source trail
 

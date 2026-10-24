@@ -6,7 +6,4 @@
 *.tsbuildinfo
 next-env.d.ts
 
-
-
-# Ignore Kane CLI evidence packs in every nested project
-**/.testmuai/evidence/
+quiff/.env.local

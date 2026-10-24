@@ -1,17 +1,19 @@
-# TICKET-005: Expire inactive sessions
+# TICKET-005: Expire unused signup verification links
 
 **Team:** Engineering
 **Type:** Enhancement
+**Assignee:** Samira Patel
 **Status:** done
 
 ## Description
 
-End sessions after a defined period of inactivity.
+Keep signup verification links valid only for a defined period and prevent reuse after completion.
 
 ## Acceptance criteria
 
-- [ ] The period is configurable
-- [ ] expired sessions require sign-in and show a clear notice.
+- [ ] The expiration period is documented.
+- [ ] Expired links show a helpful next step.
+- [ ] A completed link cannot be reused.
 
 ## Source trail
 

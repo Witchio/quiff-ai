@@ -1,16 +1,19 @@
-# TICKET-006: Make sign-in fully keyboard accessible
+# TICKET-006: Make the signup form fully keyboard accessible
 
 **Team:** Accessibility
 **Type:** Improvement
+**Assignee:** Alex Morgan
 **Status:** todo
 
 ## Description
 
-Ensure users can complete sign-in without a mouse.
+Ensure visitors can complete the signup form without a mouse.
 
 ## Acceptance criteria
 
-- [ ] Logical tab order, visible focus, and accessible status and error announcements.
+- [ ] All controls have a logical tab order and visible focus.
+- [ ] Labels and field errors are announced accessibly.
+- [ ] The form can be submitted from the keyboard.
 
 ## Source trail
 

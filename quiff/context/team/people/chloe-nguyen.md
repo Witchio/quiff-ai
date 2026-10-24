@@ -6,7 +6,7 @@
 
 ## Focus
 
-Provides analysis of login/signup product use and operations.
+Provides analysis of signup product use and operations.
 
 ## Responsibilities
 

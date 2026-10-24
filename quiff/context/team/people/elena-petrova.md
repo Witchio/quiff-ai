@@ -6,7 +6,7 @@
 
 ## Focus
 
-Evaluates applied AI capabilities for the login/signup app.
+Evaluates applied AI capabilities for the signup app.
 
 ## Responsibilities
 

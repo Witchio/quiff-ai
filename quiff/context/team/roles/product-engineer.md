@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Build and improve the login/signup app based on product requirements and user needs.
+Build and improve the signup app based on product requirements and user needs.
 
 ## Example responsibilities
 
@@ -17,7 +17,7 @@ Build and improve the login/signup app based on product requirements and user ne
 
 - User-facing product behavior
 - Frontend and application integration
-- Login/signup app features and acceptance criteria
+- signup app features and acceptance criteria
 
 ## Collaboration
 

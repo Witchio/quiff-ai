@@ -1,18 +1,19 @@
-# TICKET-049: Review renewal costs for identity vendors
+# TICKET-049: Review renewal costs for email verification vendors
 
 **Team:** Finance
 **Type:** Vendor Management
+**Assignee:** Aisha Johnson
 **Status:** todo
 
 ## Description
 
-Review upcoming renewals that support account access.
+Review upcoming renewals for services used to deliver signup verification emails.
 
 ## Acceptance criteria
 
-- [ ] Record dates and costs
-- [ ] summarize usage and alternatives
-- [ ] send recommendation before deadlines.
+- [ ] Renewal dates and costs are recorded.
+- [ ] Usage and alternatives are summarized.
+- [ ] A budget owner receives a recommendation before the deadline.
 
 ## Source trail
 

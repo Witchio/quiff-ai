@@ -2,7 +2,7 @@
 
 ## Rough description
 
-The company builds a login/signup product. Quiff is a developer tool the team is building on top of that product and its engineering workflow, initially to help engineers diagnose release-time CI/CD failures. It analyzes a failed Kane CLI run, searches repository-local mock Markdown tickets for the source ticket, follows it to the linked PR and commit, and uses OpenAI to identify relevant context. It sends a Slack notification with the failure and source trail, helping the team find which ticket and code change need attention.
+The company builds a signup product. Quiff is a developer tool the team is building on top of that product and its engineering workflow, initially to help engineers diagnose release-time CI/CD failures. It analyzes a failed Kane CLI run, searches repository-local mock Markdown tickets for the source ticket, follows it to the linked PR and commit, and uses OpenAI to identify relevant context. It sends a Slack notification with the failure and source trail, helping the team find which ticket and code change need attention.
 
 ## Product direction
 
@@ -24,9 +24,9 @@ Reduce the time an engineer spends connecting a release-time CI/CD failure to th
 
 ## Initial constraints and assumptions
 
-- The company team builds and maintains the login/signup product.
+- The company team builds and maintains the signup product.
 - Quiff is an additional developer tool built by that same team, using their product and engineering context.
-- The current repository contains a minimal login page demo; it does not yet implement the full login/signup product or the Quiff workflow described above.
+- The current repository contains a minimal signup form demo; it does not yet implement the full signup product or the Quiff workflow described above.
 - Tickets are mock Markdown files in `quiff/tickets/`.
 - Kane CLI runs are the initial source of failure data.
 - Slack is the initial notification destination.

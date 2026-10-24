@@ -6,7 +6,7 @@
 
 ## Focus
 
-Maintains build and release infrastructure for the login/signup app.
+Maintains build and release infrastructure for the signup app.
 
 ## Responsibilities
 

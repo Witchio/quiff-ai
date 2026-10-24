@@ -1,17 +1,19 @@
-# TICKET-011: Review the login and signup visual identity
+# TICKET-011: Review the signup visual identity
 
 **Team:** Brand
 **Type:** Review
+**Assignee:** Oliver Grant
 **Status:** done
 
 ## Description
 
-Check visual style, logo use, and naming across authentication screens.
+Confirm the signup screen uses approved product naming, colors, and brand assets.
 
 ## Acceptance criteria
 
-- [ ] Product and marketing approve direction
-- [ ] assets and usage notes are stored centrally.
+- [ ] Product and marketing approve the visual direction.
+- [ ] Approved assets and usage notes are stored centrally.
+- [ ] The implemented signup screen is reviewed against the guidance.
 
 ## Source trail
 

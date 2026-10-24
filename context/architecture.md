@@ -1,4 +1,4 @@
-# Architecture
+# Signup architecture
 
 ## Stack
 
@@ -7,27 +7,27 @@
 - TypeScript
 - Next.js Route Handler for server-side validation
 
-## Request flow
+## Signup request flow
 
-1. The browser collects a username and password in `app/(login)/page.tsx`.
-2. On submit, the frontend sends a JSON `POST` request to `/api/login`.
-3. `app/(login)/api/login/route.ts` parses the request and checks the credentials on the server. The `(login)` route group is omitted from the public URL, so the endpoint remains `/api/login`.
-4. The route returns a success response for `admin` / `admin`, a `401` response for incorrect credentials, or a `400` response for malformed JSON.
-5. The frontend renders the success screen or an accessible inline error based on the response.
+1. The browser collects a username, email, password, and password confirmation in `app/(signup)/page.tsx`.
+2. The frontend checks required values, email format, password confirmation, and the 8-character username and password minimum before sending a JSON `POST` request to `/api/signup`.
+3. `app/(signup)/api/signup/route.ts` independently validates the payload, including the same 8-character minimum for username and password.
+4. Valid payloads receive a `202` acknowledgment. Invalid or malformed requests receive a `400` response with a simple message.
+5. The frontend renders the submission acknowledgment or an accessible inline error based on the response.
 
 ## Boundaries
 
-- Login/signup app code lives in the Next.js `(login)` route group.
-- Credential validation belongs in the route handler, not in the client bundle.
+- Signup UI code lives in the Next.js `(signup)` route group.
+- Server-side signup validation belongs in the route handler and is independent of browser checks.
 - The client owns presentation and transient loading/error/success state.
-- The route does not create a session or persist any data, as required for this demo.
+- The route acknowledges valid data but does not create an account, session, or persistent record.
 
 ## Current limitations
 
-Credentials are hard-coded in the server route for demonstration. The app does not provide production authentication. If the project grows beyond a demo, replace this mechanism with an established identity provider or a properly designed authentication service, add session handling, and avoid committing secrets.
+The app has no database or account store. Signup requests are not persisted, and the acknowledgment must not be treated as account creation.
 
 ## Source map
 
-- `app/(login)/page.tsx` — login form and success/error UI.
-- `app/(login)/api/login/route.ts` — server-side demo credential validation endpoint.
+- `app/(signup)/page.tsx` — signup form and success/error UI.
+- `app/(signup)/api/signup/route.ts` — server-side signup validation endpoint.
 - `app/layout.tsx` and `app/globals.css` — shared Next.js document and styling.

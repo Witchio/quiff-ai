@@ -6,7 +6,7 @@
 
 ## Focus
 
-Keeps the login/signup app available and diagnosable in production.
+Keeps the signup app available and diagnosable in production.
 
 ## Responsibilities
 

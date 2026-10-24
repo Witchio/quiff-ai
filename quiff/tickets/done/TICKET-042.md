@@ -2,6 +2,7 @@
 
 **Team:** Sales Operations
 **Type:** Process
+**Assignee:** Sofia Rivera
 **Status:** done
 
 ## Description

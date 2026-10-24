@@ -2,6 +2,7 @@
 
 **Team:** Privacy
 **Type:** Audit
+**Assignee:** Chloe Nguyen
 **Status:** todo
 
 ## Description

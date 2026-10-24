@@ -1,18 +1,19 @@
-# TICKET-010: Add structured sign-in error logging
+# TICKET-010: Add structured signup error logging
 
 **Team:** Engineering
 **Type:** Maintenance
+**Assignee:** Samira Patel
 **Status:** todo
 
 ## Description
 
-Improve diagnosis of sign-in failures without recording secrets.
+Capture enough information to diagnose signup endpoint failures without recording passwords or full signup payloads.
 
 ## Acceptance criteria
 
-- [ ] Expected and unexpected failures are distinguishable
-- [ ] passwords and credential payloads are never logged
-- [ ] include a request ID.
+- [ ] Expected and unexpected failures are distinguishable.
+- [ ] Passwords, confirmation values, and email addresses are not logged.
+- [ ] Logs include a request identifier.
 
 ## Source trail
 

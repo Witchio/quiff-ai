@@ -1,18 +1,19 @@
-# TICKET-028: Allow users to request an account data export
+# TICKET-028: Collect optional marketing consent separately
 
 **Team:** Privacy
 **Type:** Feature
+**Assignee:** Peter Novak
 **Status:** done
 
 ## Description
 
-Provide a process for users to request a copy of their account data.
+If signup includes marketing consent, make it an explicit optional choice distinct from required signup details.
 
 ## Acceptance criteria
 
-- [ ] Document request channel
-- [ ] verify identity before release
-- [ ] include approved data categories.
+- [ ] The choice is unchecked by default.
+- [ ] Declining does not block signup submission.
+- [ ] The consent state and wording are reviewed by privacy and legal.
 
 ## Source trail
 

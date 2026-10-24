@@ -1,17 +1,19 @@
-# TICKET-004: Build the password reset flow
+# TICKET-004: Resend a signup verification email
 
 **Team:** Engineering
 **Type:** Feature
+**Assignee:** Samira Patel
 **Status:** todo
 
 ## Description
 
-Allow users who cannot sign in to request a password reset by email.
+Let a visitor request another verification message when the first signup email did not arrive or has expired.
 
 ## Acceptance criteria
 
-- [ ] Reset links are single-use and expire
-- [ ] response does not disclose whether an account exists.
+- [ ] Provide a clear resend entry point after signup.
+- [ ] Apply a documented resend limit.
+- [ ] Show a generic confirmation that does not expose account existence.
 
 ## Source trail
 

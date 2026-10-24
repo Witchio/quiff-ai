@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Make the login/signup app's infrastructure, delivery pipeline, and integrations reliable and observable.
+Make the signup app's infrastructure, delivery pipeline, and integrations reliable and observable.
 
 ## Example responsibilities
 

@@ -1,18 +1,19 @@
-# TICKET-044: Create reusable authentication form components
+# TICKET-044: Create reusable signup form components
 
 **Team:** Design
 **Type:** System
+**Assignee:** Alex Morgan
 **Status:** done
 
 ## Description
 
-Define consistent patterns for login and signup forms.
+Define reusable form patterns so signup fields and feedback stay consistent.
 
 ## Acceptance criteria
 
-- [ ] Specify inputs, labels, help and error states
-- [ ] document keyboard behavior
-- [ ] review with frontend engineering.
+- [ ] Inputs, labels, helper text, and errors are specified.
+- [ ] Keyboard and accessibility behavior is documented.
+- [ ] Design and frontend engineering review the guidance.
 
 ## Source trail
 

@@ -6,7 +6,7 @@
 
 ## Focus
 
-Designs clear, accessible login and signup experiences.
+Designs clear, accessible signup experiences.
 
 ## Responsibilities
 

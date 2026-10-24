@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiff · Pipeline</title>
+  <style>
+    :root{color-scheme:light;--ink:#252b28;--muted:#858d87;--line:#e9ece8;--green:#3c765b;--soft:#eff5f0;--blue:#7895ab}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f7f9f7;color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:grid;place-items:center;padding:32px 20px}
+    .shell{width:min(100%,780px)}.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;font-size:14px;font-weight:650;letter-spacing:.01em}.mark{width:34px;height:34px;border-radius:11px;background:#e8f0e9;color:#3c765b;display:grid;place-items:center;font-size:19px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:36px 40px;box-shadow:0 16px 50px #24392b0a}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.eyebrow{margin:0 0 7px;text-transform:uppercase;letter-spacing:.14em;font-size:10px;font-weight:700;color:var(--muted)}h1{font-size:26px;line-height:1.2;letter-spacing:-.04em;margin:0}.subtitle{color:var(--muted);margin:9px 0 0;font-size:13px}.badge{white-space:nowrap;border-radius:20px;background:#f2f5f2;padding:7px 11px;color:#617168;font-size:11px;font-weight:650}.badge.running{background:#f2f6f8;color:#66849a}.badge.done{background:#edf5ef;color:#3d7656}.badge.failed{background:#fbefed;color:#b05247}
+    .progress{height:6px;border-radius:8px;background:#edf0ed;margin:30px 0 27px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#8db49a,#477b5e);border-radius:8px;transition:width .55s cubic-bezier(.2,.7,.2,1)}.steps{display:grid;gap:0}.step{display:grid;grid-template-columns:36px 1fr auto;align-items:center;min-height:66px;border-bottom:1px solid #f0f2ef}.step:last-child{border:0}.icon{width:26px;height:26px;border-radius:50%;background:#f0f2ef;color:#98a099;display:grid;place-items:center;font-size:12px;transition:all .25s}.step.active .icon{background:#eaf2ec;color:#397153;box-shadow:0 0 0 5px #f5f8f5;animation:pulse 1.8s infinite}.step.complete .icon{background:#eaf3eb;color:#3e7958}.label{font-size:13px;font-weight:600}.detail{font-size:11px;color:var(--muted);margin-top:2px}.state{font-size:11px;color:#a2a9a3}.step.active .state{color:#668774}.foot{margin-top:23px;padding-top:19px;border-top:1px solid #f0f2ef;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:11px}.foot strong{color:#667169;font-weight:550}.pulse-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#8baa95;margin-right:6px;animation:blink 1.5s infinite}@keyframes pulse{50%{box-shadow:0 0 0 8px #f5f8f5}}@keyframes blink{50%{opacity:.35}}@media(max-width:560px){.card{padding:27px 22px}.top{align-items:flex-start}h1{font-size:23px}.step{grid-template-columns:34px 1fr auto}.foot{flex-direction:column;gap:4px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><span class="mark" aria-hidden="true">↗</span><span>Quiff <span style="font-weight:400;color:#929a94">/ local pipeline</span></span></div>
+    <section class="card" aria-live="polite">
+      <div class="top"><div><p class="eyebrow">Continuous integration</p><h1 id="title">Preparing your pipeline</h1><p class="subtitle" id="message">Starting the progress dashboard…</p></div><span class="badge running" id="badge">Starting</span></div>
+      <div class="progress" aria-label="Pipeline progress"><div class="bar" id="bar"></div></div>
+      <div class="steps" id="steps"></div>
+      <div class="foot"><span id="connection"><i class="pulse-dot"></i>Live pipeline updates</span><strong>Docker · Kane CLI</strong></div>
+    </section>
+  </main>
+  <script>
+    const steps=[['Check prerequisites','Confirm Docker, Kane CLI, and the local port are ready.'],['Build app image','Create the Docker image for the signup app.'],['Start app container','Launch the app for the browser checks.'],['Wait for app health','Check that the app responds at localhost:3000.'],['Run saved Kane tests','Run the end-to-end checks against the app.'],['Clean up','Stop and remove the temporary app container.']];
+    const root=document.getElementById('steps');
+    root.innerHTML=steps.map((s,i)=>`<div class="step" id="step-${i+1}"><span class="icon">${i+1}</span><div><div class="label">${s[0]}</div><div class="detail">${s[1]}</div></div><span class="state">Waiting</span></div>`).join('');
+    function update(data){const current=Number(data.step)||0;const terminal=['success','failed'].includes(data.status);document.getElementById('bar').style.width=(data.status==='success'?100:Math.min(96,current/6*100))+'%';document.getElementById('title').textContent=data.status==='success'?'Pipeline completed':data.status==='failed'?'Pipeline failed':data.title||'Pipeline in progress';document.getElementById('message').textContent=data.message||'';const badge=document.getElementById('badge');badge.textContent=data.status==='success'?'Complete':data.status==='failed'?'Failed':data.status==='starting'?'Starting':'In progress';badge.className='badge '+(data.status==='success'?'done':data.status==='failed'?'failed':'running');steps.forEach((_,i)=>{const n=i+1,el=document.getElementById(`step-${n}`),state=el.querySelector('.state'),icon=el.querySelector('.icon');el.className='step '+(data.status==='success'||n<current?'complete':n===current&&!terminal?'active':'');if(data.status==='failed'&&n===current){el.className='step active';state.textContent='Needs attention';icon.textContent='!'}else if(data.status==='success'||n<current){state.textContent='Complete';icon.textContent='✓'}else if(n===current){state.textContent='In progress';icon.textContent='↻'}else{state.textContent='Waiting';icon.textContent=String(n)}});if(data.status==='success')document.getElementById('connection').textContent='✓ All pipeline steps finished';else if(data.status==='failed')document.getElementById('connection').textContent='Pipeline stopped · see terminal for details'}
+    const events=new EventSource('/events');events.onmessage=e=>update(JSON.parse(e.data));events.onerror=()=>{document.getElementById('connection').textContent='Reconnecting to pipeline…'};
+  </script>
+</body>
+</html>

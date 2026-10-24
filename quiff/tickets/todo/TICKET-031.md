@@ -1,18 +1,19 @@
-# TICKET-031: Run a database backup restore exercise
+# TICKET-031: Test signup email delivery recovery
 
 **Team:** Engineering
 **Type:** Operations
+**Assignee:** Noah Brooks
 **Status:** todo
 
 ## Description
 
-Confirm account data backups can be restored within recovery expectations.
+Confirm the signup experience handles delayed or unavailable email delivery clearly.
 
 ## Acceptance criteria
 
-- [ ] Restore in non-production
-- [ ] record recovery duration and data loss window
-- [ ] assign follow-up actions.
+- [ ] Simulate a delivery failure in a non-production environment.
+- [ ] Record recovery behavior and user-facing messages.
+- [ ] Assign follow-up actions for any gaps.
 
 ## Source trail
 

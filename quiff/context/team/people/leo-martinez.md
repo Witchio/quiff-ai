@@ -6,7 +6,7 @@
 
 ## Focus
 
-Defines and prioritizes improvements to the login/signup app.
+Defines and prioritizes improvements to the signup app.
 
 ## Responsibilities
 

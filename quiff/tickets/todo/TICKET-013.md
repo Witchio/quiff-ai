@@ -2,6 +2,7 @@
 
 **Team:** Customer Success
 **Type:** Documentation
+**Assignee:** Ethan Cole
 **Status:** todo
 
 ## Description
@@ -10,7 +11,7 @@ Help new customers understand how to get started with the app.
 
 ## Acceptance criteria
 
-- [ ] Cover account creation and sign-in
+- [ ] Cover account creation and signup
 - [ ] use current screenshots
 - [ ] customer success reviews it.
 
