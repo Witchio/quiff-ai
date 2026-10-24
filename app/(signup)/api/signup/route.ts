@@ -33,8 +33,8 @@ export async function POST(request: Request) {
   if (!username) {
     return NextResponse.json({ message: 'Enter a username.' }, { status: 400 });
   }
-  if (characterCount(username) < 8) {
-    return NextResponse.json({ message: 'Username must be at least 8 characters.' }, { status: 400 });
+  if (characterCount(username) < 10) {
+    return NextResponse.json({ message: 'Username must be at least 10 characters.' }, { status: 400 });
   }
   if (characterCount(username) > 64) {
     return NextResponse.json({ message: 'Username must be 64 characters or fewer.' }, { status: 400 });
@@ -45,8 +45,8 @@ export async function POST(request: Request) {
   if (!password) {
     return NextResponse.json({ message: 'Enter a password.' }, { status: 400 });
   }
-  if (characterCount(password) < 8) {
-    return NextResponse.json({ message: 'Password must be at least 8 characters.' }, { status: 400 });
+  if (characterCount(password) < 10) {
+    return NextResponse.json({ message: 'Password must be at least 10 characters.' }, { status: 400 });
   }
   if (characterCount(password) > 128) {
     return NextResponse.json({ message: 'Password must be 128 characters or fewer.' }, { status: 400 });
