@@ -51,6 +51,13 @@ The current app only demonstrates sign-in using hard-coded credentials. The sele
 
 Use a responsive split layout with a calm green welcome panel and a focused form panel. Show the 8-character username minimum and 10-character password minimum. Associate errors with their fields and use a form-level alert for server or network errors. The acknowledgment should say that details were accepted for the demo request but not stored.
 
+## Password boundary regression tests
+
+Keep the two requested browser tests focused on password length; use otherwise-valid signup details in both cases, including a username with at least 10 characters, a valid email address, and a matching password confirmation.
+
+1. Submit a valid signup with a password of exactly 10 characters and verify the non-persistent signup acknowledgment.
+2. Submit an otherwise-valid signup with a password of exactly 8 characters and verify the password field shows the 10-character minimum error and no signup request is sent.
+
 ## Success criteria
 
 - Usernames below 8 characters and passwords below 10 characters show field errors and do not submit.
