@@ -20,3 +20,13 @@ npm --prefix quiff run pipeline:local
 ```
 
 The local pipeline builds the signup app image, starts it on port 3000, waits for it to respond, runs saved Kane tests, and removes its temporary container.
+
+## Test the Slack webhook
+
+Set `SLACK_WEBHOOK_URL` in the ignored `quiff/.env.local` file, then send a test message with:
+
+```bash
+npm --prefix quiff run test:slack
+```
+
+The script prints no webhook value. Rotate any URL that has been shared, and only put the replacement in the local env file.
