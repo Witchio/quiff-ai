@@ -19,7 +19,11 @@ npm --prefix quiff run test:kane
 npm --prefix quiff run pipeline:local
 ```
 
-The local pipeline builds the signup app image, starts it on port 3000, waits for it to respond, runs saved Kane tests, and removes its temporary container.
+The local pipeline builds the signup app image, starts it on port 3000, waits for it to respond, runs saved Kane tests, and removes its temporary container. It opens a browser dashboard to show each stage.
+
+When Kane fails, the pipeline saves a redacted, size-limited failure log and run metadata under `quiff/.testmuai/attribution-runs/`, then starts Codex CLI in a read-only sandbox. Codex reads the local ticket/team context and uses the read-only `quiff-github` MCP server to inspect GitHub issues, PRs, commits, and diffs. The attribution result is saved beside the failure input and shown in the dashboard. The last passing SHA from a clean checkout is tracked locally per branch in `quiff/.testmuai/pipeline-state.json` to narrow the change range. Notifications are not sent.
+
+The local attribution path requires the Codex CLI, GitHub CLI, and the configured `quiff-github` MCP server. The MCP launcher reads its fine-grained GitHub token from the macOS login keychain. If Codex attribution fails, the pipeline still exits with the original Kane test failure code.
 
 ## Test the Slack webhook
 
