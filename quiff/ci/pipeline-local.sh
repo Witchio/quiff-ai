@@ -18,6 +18,7 @@ CURRENT_STEP=1
 KANE_FAILED=0
 ANALYSIS_COMPLETED=0
 ANALYSIS_FAILED=0
+CODEX_CHECK_STARTED=0
 TESTED_SHA=""
 BRANCH_NAME=""
 REPOSITORY_NAME=""
@@ -92,12 +93,17 @@ cleanup() {
     if (( KANE_FAILED == 1 )); then
       failed_steps='[2]'
       if (( ANALYSIS_COMPLETED == 1 )); then
-        completed_steps='[1,3]'
+        completed_steps='[1,3,4]'
         progress_title='Kane tests failed · investigation complete'
         progress_message='Quiff finished investigating the failure. See the findings and Slack notification status below.'
       elif (( ANALYSIS_FAILED == 1 )); then
-        failed_steps='[2,3]'
-        completed_steps='[1]'
+        if (( CODEX_CHECK_STARTED == 1 )); then
+          failed_steps='[2,4]'
+          completed_steps='[1,3]'
+        else
+          failed_steps='[2,3]'
+          completed_steps='[1]'
+        fi
         progress_title='Kane tests failed · investigation incomplete'
         progress_message='Quiff could not complete the investigation. See the run artifacts and Slack notification status below.'
       else
@@ -108,7 +114,10 @@ cleanup() {
     fi
     progress_extra="\"completedSteps\":${completed_steps},\"failedSteps\":${failed_steps},\"skippedSteps\":${skipped_steps}"
     local final_step=1
-    if (( KANE_FAILED == 1 )); then final_step=3; fi
+    if (( KANE_FAILED == 1 )); then
+      final_step=3
+      if (( ANALYSIS_COMPLETED == 1 || CODEX_CHECK_STARTED == 1 )); then final_step=4; fi
+    fi
     progress failed "$final_step" "$progress_title" "$progress_message" "$progress_extra"
   fi
   if [[ -n "$KANE_LOG" && -f "$KANE_LOG" ]]; then rm -f -- "$KANE_LOG"; fi
@@ -203,7 +212,7 @@ if (( KANE_STATUS != 0 )); then
   KANE_FAILED=1
   RUN_DIR="$QUIFF_DIR/.testmuai/attribution-runs/$RUN_ID"
   CURRENT_STEP=3
-  progress running 3 'Kane tests failed · Quiff is investigating' 'Quiff is investigating what caused the failure and who may be responsible.' '"completedSteps":[1],"failedSteps":[2],"investigationSteps":[{"id":"failure","label":"Review Kane failure evidence","status":"running"}]'
+  progress running 3 'Launch Quiff-Ai' 'Kane tests failed. Quiff is preparing to launch its investigator to check the cause and likely responsibility.' '"completedSteps":[1],"failedSteps":[2]'
   if ! node "$QUIFF_DIR/ci/prepare-failure-input.mjs" \
     "$RUN_ID" "$RUN_DIR" "$KANE_LOG" "$KANE_STATUS" \
     "$BRANCH_NAME" "$TESTED_SHA" "$PIPELINE_STARTED_AT" \
@@ -211,13 +220,14 @@ if (( KANE_STATUS != 0 )); then
     ANALYSIS_FAILED=1
     printf 'Could not prepare the Codex failure input.\n' >&2
   else
-    progress running 3 'Kane tests failed · Quiff is investigating' 'Reviewing the failure evidence and tracing the source ticket, PR, and code change.'
+    progress running 3 'Launch Quiff-Ai' 'Failure report is ready. Launching Codex to inspect the evidence.' '"completedSteps":[1],"failedSteps":[2]'
     if node "$QUIFF_DIR/ci/run-attribution.mjs" "$RUN_ID" "$RUN_DIR" "$PROGRESS_URL"; then
       ANALYSIS_COMPLETED=1
     else
       ANALYSIS_FAILED=1
       printf 'Codex attribution failed; see the pipeline log and run artifacts.\n' >&2
     fi
+    if [[ -f "$RUN_DIR/codex-investigation-started" ]]; then CODEX_CHECK_STARTED=1; fi
   fi
   if ! node "$QUIFF_DIR/ci/notify-slack.mjs" "$RUN_ID" "$RUN_DIR" "$PROGRESS_URL"; then
     printf 'Slack notification could not be delivered.\n' >&2

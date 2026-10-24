@@ -57,8 +57,10 @@ function postProgress(payload) {
   }).catch(() => {});
 }
 
+const investigationStartedPath = join(absoluteRunDirectory, 'codex-investigation-started');
 const investigationSteps = [];
 let progressQueue = Promise.resolve();
+let investigationStarted = false;
 const phases = {
   failure: 'Review Kane failure evidence',
   tickets: 'Search matching tickets and PRs',
@@ -75,26 +77,43 @@ function startPhase(id) {
   investigationSteps.push({ id, label: phases[id], status: 'running' });
   const snapshot = investigationSteps.map((phase) => ({ ...phase }));
   progressQueue = progressQueue.then(() => postProgress({
-    status: 'running', step: 3, title: 'Kane tests failed · Quiff is investigating',
+    status: 'running', step: 4, title: 'Investigate failure',
     message: 'Quiff is investigating what caused the failure and who may be responsible.',
-    completedSteps: [1], failedSteps: [2], investigationSteps: snapshot
+    completedSteps: [1, 3], failedSteps: [2], investigationSteps: snapshot
   }));
   return progressQueue;
 }
 
-await startPhase('failure');
+async function beginInvestigation() {
+  if (investigationStarted) return;
+  investigationStarted = true;
+  await writeFile(investigationStartedPath, `${new Date().toISOString()}\n`, { mode: 0o600 });
+  await postProgress({
+    status: 'running', step: 4, title: 'Investigate failure',
+    message: 'Codex is checking the failure evidence and looking for its likely cause.',
+    completedSteps: [1, 3], failedSteps: [2]
+  });
+  await startPhase('failure');
+}
 
-function handleCodexEvent(event) {
+await postProgress({
+  status: 'running', step: 3, title: 'Launch Quiff-Ai',
+  message: 'Quiff is preparing the failure report and starting Codex.',
+  completedSteps: [1], failedSteps: [2]
+});
+
+async function handleCodexEvent(event) {
   if (event?.type !== 'item.started') return;
   const item = event.item ?? {};
   const tool = item.tool ?? item.name ?? item.tool_name ?? '';
   const command = Array.isArray(item.command) ? item.command.join(' ') : (item.command ?? '');
+  if (['mcp_tool_call', 'command_execution', 'local_shell_call'].includes(item.type)) await beginInvestigation();
   if (item.type === 'mcp_tool_call') {
-    if (['search_issues', 'search_pull_requests'].includes(tool)) void startPhase('tickets');
-    else if (['get_pull_request', 'get_pull_request_files', 'get_pull_request_commits', 'compare_commits', 'get_pull_requests_for_commit'].includes(tool)) void startPhase('changes');
+    if (['search_issues', 'search_pull_requests'].includes(tool)) await startPhase('tickets');
+    else if (['get_pull_request', 'get_pull_request_files', 'get_pull_request_commits', 'compare_commits', 'get_pull_requests_for_commit'].includes(tool)) await startPhase('changes');
   } else if (item.type === 'command_execution' || item.type === 'local_shell_call') {
-    if (/quiff\/tickets|tickets\/TICKET-/i.test(command)) void startPhase('tickets');
-    else if (/git\s+(show|log|diff)|pull_request|commit/i.test(command)) void startPhase('changes');
+    if (/quiff\/tickets|tickets\/TICKET-/i.test(command)) await startPhase('tickets');
+    else if (/git\s+(show|log|diff)|pull_request|commit/i.test(command)) await startPhase('changes');
   }
 }
 
@@ -108,20 +127,31 @@ const exitPromise = new Promise((resolveExit) => {
 });
 const eventLines = createInterface({ input: child.stdout, crlfDelay: Infinity });
 for await (const line of eventLines) {
-  try { handleCodexEvent(JSON.parse(line)); } catch { /* Ignore non-JSON CLI output. */ }
+  try { await handleCodexEvent(JSON.parse(line)); } catch { /* Ignore non-JSON CLI output. */ }
 }
 await progressQueue;
 const exitCode = await exitPromise;
 
 if (exitCode !== 0) {
+  const failedStep = investigationStarted ? 4 : 3;
   await postProgress({
-    status: 'running', step: 3, title: 'Attribution unavailable',
+    status: 'running', step: failedStep, title: 'Attribution unavailable',
     message: 'Codex could not complete the investigation. The Kane failure remains available in the run artifacts.',
+    completedSteps: investigationStarted ? [1, 3] : [1], failedSteps: [2, failedStep],
     analysisError: `Codex exited with code ${exitCode}.`
   });
   process.exit(exitCode);
 }
 
+if (!investigationStarted) {
+  await postProgress({
+    status: 'running', step: 3, title: 'Attribution unavailable',
+    message: 'Codex did not inspect the failure evidence, so Quiff cannot make a source-backed attribution.',
+    completedSteps: [1], failedSteps: [2, 3],
+    analysisError: 'Codex completed without starting an evidence inspection.'
+  });
+  fail('Codex completed without inspecting failure evidence.');
+}
 await startPhase('assessment');
 
 let result;
@@ -129,7 +159,7 @@ try {
   result = JSON.parse(await readFile(rawOutputPath, 'utf8'));
 } catch {
   await postProgress({
-    status: 'running', step: 3, title: 'Attribution unavailable',
+    status: 'running', step: 4, title: 'Attribution unavailable',
     message: 'Codex returned a result that could not be parsed as JSON.',
     analysisError: 'Codex response was not valid JSON.'
   });
@@ -152,7 +182,7 @@ const attributionValid = attributed && ['high', 'medium', 'low'].includes(result
 const inconclusiveValid = result.status === 'inconclusive' && result.confidence === 'none' && result.attribution === null;
 if (!commonValid || !(attributionValid || inconclusiveValid)) {
   await postProgress({
-    status: 'running', step: 3, title: 'Attribution unavailable',
+    status: 'running', step: 4, title: 'Attribution unavailable',
     message: 'Codex returned a result that did not match Quiff’s attribution contract.',
     analysisError: 'Codex output failed contract validation.'
   });
@@ -167,8 +197,8 @@ const message = attributed
   ? `Likely change by ${person}; ticket ${result.attribution.ticket.id}, PR #${result.attribution.pull_request.number}.`
   : 'The evidence does not support naming a likely bug introducer.';
 await postProgress({
-  status: 'running', step: 3, title: 'Attribution ready', message,
+  status: 'running', step: 4, title: 'Attribution ready', message,
   finding: result, analysisError: null, investigationSteps,
-  completedSteps: [1, 3], failedSteps: [2]
+  completedSteps: [1, 3, 4], failedSteps: [2]
 });
 process.stdout.write(`\n${message}\nResult saved to ${finalResultPath}\n`);

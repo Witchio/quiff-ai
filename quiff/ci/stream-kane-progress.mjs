@@ -70,9 +70,9 @@ for await (const line of lines) {
     const samePath = (left, right) => left === right || left.endsWith(`/${right}`) || right.endsWith(`/${left}`);
     testCases = testCases.map((test) => {
       if (!samePath(test.path, event.path || '')) return test;
-      if (event.type.endsWith('_start')) return { ...test, status: 'running' };
+      if (event.type.endsWith('_start')) return { ...test, status: 'running', startedAt: test.startedAt ?? Date.now(), endedAt: null };
       const status = ['passed', 'failed', 'skipped'].includes(event.status) ? event.status : 'broken';
-      return { ...test, status, duration_s: event.duration_s, failure: event.failure };
+      return { ...test, status, endedAt: Date.now(), duration_s: event.duration_s, failure: event.failure };
     });
     await publish();
   } else if (event.type === 'testrun_done') {
