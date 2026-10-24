@@ -2,6 +2,7 @@
 
 **Team:** Release Management
 **Type:** Process
+**Assignee:** Noah Brooks
 **Status:** todo
 
 ## Description

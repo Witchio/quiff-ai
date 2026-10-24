@@ -2,6 +2,7 @@
 
 **Team:** Engineering
 **Type:** Documentation
+**Assignee:** Samira Patel
 **Status:** todo
 
 ## Description

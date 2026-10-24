@@ -2,6 +2,7 @@
 
 **Team:** Accessibility
 **Type:** Audit
+**Assignee:** Priya Shah
 **Status:** todo
 
 ## Description

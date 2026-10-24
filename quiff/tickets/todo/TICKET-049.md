@@ -2,6 +2,7 @@
 
 **Team:** Finance
 **Type:** Vendor Management
+**Assignee:** Aisha Johnson
 **Status:** todo
 
 ## Description

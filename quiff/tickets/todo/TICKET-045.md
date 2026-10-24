@@ -2,6 +2,7 @@
 
 **Team:** Privacy
 **Type:** Review
+**Assignee:** Chloe Nguyen
 **Status:** todo
 
 ## Description

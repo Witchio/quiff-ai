@@ -2,6 +2,7 @@
 
 **Team:** Recruiting
 **Type:** Hiring
+**Assignee:** Daniel Foster
 **Status:** done
 
 ## Description

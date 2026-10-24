@@ -2,6 +2,7 @@
 
 **Team:** Frontend
 **Type:** Enhancement
+**Assignee:** Alex Morgan
 **Status:** done
 
 ## Description

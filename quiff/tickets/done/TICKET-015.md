@@ -2,6 +2,7 @@
 
 **Team:** Customer Support
 **Type:** Operations
+**Assignee:** Ethan Cole
 **Status:** done
 
 ## Description

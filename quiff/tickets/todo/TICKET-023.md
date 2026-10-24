@@ -2,6 +2,7 @@
 
 **Team:** Operations
 **Type:** Continuity
+**Assignee:** Lucy Bennett
 **Status:** todo
 
 ## Description

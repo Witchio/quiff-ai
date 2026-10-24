@@ -2,6 +2,7 @@
 
 **Team:** Marketing
 **Type:** Campaign
+**Assignee:** Oliver Grant
 **Status:** todo
 
 ## Description

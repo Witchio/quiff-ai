@@ -2,6 +2,7 @@
 
 **Team:** Research
 **Type:** Usability
+**Assignee:** Priya Shah
 **Status:** todo
 
 ## Description

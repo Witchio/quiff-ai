@@ -2,6 +2,7 @@
 
 **Team:** Privacy
 **Type:** Feature
+**Assignee:** Peter Novak
 **Status:** done
 
 ## Description

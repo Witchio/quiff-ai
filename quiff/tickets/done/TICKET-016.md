@@ -2,6 +2,7 @@
 
 **Team:** Sales
 **Type:** Enablement
+**Assignee:** Sofia Rivera
 **Status:** done
 
 ## Description

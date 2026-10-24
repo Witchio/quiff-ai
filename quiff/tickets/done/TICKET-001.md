@@ -2,6 +2,7 @@
 
 **Team:** Product
 **Type:** Feature
+**Assignee:** Jordan Kim
 **Status:** done
 
 ## Description

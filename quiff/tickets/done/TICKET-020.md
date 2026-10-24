@@ -2,6 +2,7 @@
 
 **Team:** Finance
 **Type:** Reporting
+**Assignee:** Aisha Johnson
 **Status:** done
 
 ## Description

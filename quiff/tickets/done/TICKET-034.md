@@ -2,6 +2,7 @@
 
 **Team:** Engineering
 **Type:** Maintenance
+**Assignee:** Noah Brooks
 **Status:** done
 
 ## Description

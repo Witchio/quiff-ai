@@ -2,6 +2,7 @@
 
 **Team:** Office Operations
 **Type:** Inventory
+**Assignee:** Lucy Bennett
 **Status:** todo
 
 ## Description

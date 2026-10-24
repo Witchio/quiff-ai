@@ -2,6 +2,7 @@
 
 **Team:** Legal
 **Type:** Review
+**Assignee:** Peter Novak
 **Status:** todo
 
 ## Description

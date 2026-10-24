@@ -2,6 +2,7 @@
 
 **Team:** Localization
 **Type:** Planning
+**Assignee:** Priya Shah
 **Status:** todo
 
 ## Description

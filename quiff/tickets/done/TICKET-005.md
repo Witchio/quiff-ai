@@ -2,6 +2,7 @@
 
 **Team:** Engineering
 **Type:** Enhancement
+**Assignee:** Samira Patel
 **Status:** done
 
 ## Description

@@ -2,6 +2,7 @@
 
 **Team:** Customer Success
 **Type:** Documentation
+**Assignee:** Ethan Cole
 **Status:** todo
 
 ## Description

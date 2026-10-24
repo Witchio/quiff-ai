@@ -2,6 +2,7 @@
 
 **Team:** Engineering
 **Type:** Feature
+**Assignee:** Samira Patel
 **Status:** done
 
 ## Description

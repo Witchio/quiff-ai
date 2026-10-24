@@ -2,6 +2,7 @@
 
 **Team:** Customer Support
 **Type:** Documentation
+**Assignee:** Ethan Cole
 **Status:** done
 
 ## Description

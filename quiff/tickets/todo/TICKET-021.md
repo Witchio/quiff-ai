@@ -2,6 +2,7 @@
 
 **Team:** People Operations
 **Type:** Hiring
+**Assignee:** Hannah Brooks
 **Status:** todo
 
 ## Description

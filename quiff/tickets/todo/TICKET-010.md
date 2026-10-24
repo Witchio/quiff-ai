@@ -2,6 +2,7 @@
 
 **Team:** Engineering
 **Type:** Maintenance
+**Assignee:** Samira Patel
 **Status:** todo
 
 ## Description

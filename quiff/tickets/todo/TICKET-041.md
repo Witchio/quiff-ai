@@ -2,6 +2,7 @@
 
 **Team:** Customer Success
 **Type:** Analysis
+**Assignee:** Chloe Nguyen
 **Status:** todo
 
 ## Description

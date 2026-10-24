@@ -2,6 +2,7 @@
 
 **Team:** Marketing
 **Type:** Content
+**Assignee:** Oliver Grant
 **Status:** done
 
 ## Description

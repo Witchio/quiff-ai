@@ -2,6 +2,7 @@
 
 **Team:** Security
 **Type:** Assessment
+**Assignee:** Grace Okafor
 **Status:** done
 
 ## Description
