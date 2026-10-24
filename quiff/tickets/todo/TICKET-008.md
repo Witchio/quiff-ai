@@ -17,5 +17,5 @@ The signup endpoint independently checks that both username and password contain
 
 ## Source trail
 
-- Related pull request: TBD
+- Related pull request: https://github.com/Witchio/quiff-ai/pull/3
 - Related commit: TBD

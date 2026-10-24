@@ -21,7 +21,7 @@ function getErrors(values: FormValues): FormErrors {
   const passwordLength = Array.from(values.password).length;
 
   if (!values.username.trim()) errors.username = 'Enter a username.';
-  else if (usernameLength < 8) errors.username = 'Username must be at least 8 characters.';
+  else if (usernameLength < 6) errors.username = 'Username must be at least 6 characters.';
   else if (usernameLength > 64) errors.username = 'Username must be 64 characters or fewer.';
 
   if (!values.email.trim()) errors.email = 'Enter your email address.';
@@ -31,7 +31,7 @@ function getErrors(values: FormValues): FormErrors {
   }
 
   if (!values.password) errors.password = 'Enter a password.';
-  else if (passwordLength < 8) errors.password = 'Password must be at least 8 characters.';
+  else if (passwordLength < 6) errors.password = 'Password must be at least 6 characters.';
   else if (passwordLength > 128) errors.password = 'Password must be 128 characters or fewer.';
 
   if (!values.confirmPassword) errors.confirmPassword = 'Confirm your password.';
@@ -158,12 +158,12 @@ export default function SignupPage() {
                   value={values.username}
                   onChange={(event) => updateField('username', event.target.value)}
                   placeholder="Choose a username"
-                  minLength={8}
+                  minLength={6}
                   required
                   aria-invalid={Boolean(errors.username)}
                   aria-describedby={errors.username ? 'username-error' : 'username-help'}
                 />
-                {errors.username ? <p className="field-error" id="username-error">{errors.username}</p> : <p className="field-help" id="username-help">At least 8 characters</p>}
+                {errors.username ? <p className="field-error" id="username-error">{errors.username}</p> : <p className="field-help" id="username-help">At least 6 characters</p>}
               </div>
 
               <div className="field-group">
@@ -195,7 +195,7 @@ export default function SignupPage() {
                     value={values.password}
                     onChange={(event) => updateField('password', event.target.value)}
                     placeholder="Create a password"
-                    minLength={8}
+                    minLength={6}
                     required
                     aria-invalid={Boolean(errors.password)}
                     aria-describedby={errors.password ? 'password-error' : 'password-help'}
@@ -204,7 +204,7 @@ export default function SignupPage() {
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
-                {errors.password ? <p className="field-error" id="password-error">{errors.password}</p> : <p className="field-help" id="password-help">At least 8 characters</p>}
+                {errors.password ? <p className="field-error" id="password-error">{errors.password}</p> : <p className="field-help" id="password-help">At least 6 characters</p>}
               </div>
 
               <div className="field-group">
