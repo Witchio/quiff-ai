@@ -1,0 +1,6 @@
+{
+  "description": "Map GitHub logins to Slack member IDs for incident notifications. Slack IDs are not secrets.",
+  "github_to_slack_id": {
+    "Witchio": "U0C9QAD8CV7"
+  }
+}

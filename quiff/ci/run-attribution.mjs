@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import { readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve, sep } from 'node:path';
+import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 const ciDir = dirname(fileURLToPath(import.meta.url));
@@ -39,7 +40,7 @@ const outputSchema = join(ciDir, 'contracts', 'attribution-result.schema.json');
 const rawOutputPath = join(absoluteRunDirectory, 'codex-response.json');
 const prompt = `${systemInstructions}\n\nInvestigate this run now. Read the failure input at ${inputPath}, then read the Kane log it references. Return only the structured JSON result.`;
 const args = [
-  'exec', '--ephemeral', '--sandbox', 'read-only',
+  'exec', '--json', '--ephemeral', '--sandbox', 'read-only',
   '--output-schema', outputSchema,
   '--output-last-message', rawOutputPath,
   '-C', rootDir,
@@ -56,35 +57,79 @@ function postProgress(payload) {
   }).catch(() => {});
 }
 
-await postProgress({
-  status: 'running', step: 6, title: 'Investigate the failure',
-  message: 'Codex is comparing the Kane failure with tickets, PRs, and code changes.'
-});
+const investigationSteps = [];
+let progressQueue = Promise.resolve();
+const phases = {
+  failure: 'Review Kane failure evidence',
+  tickets: 'Search matching tickets and PRs',
+  changes: 'Trace related commits and code changes',
+  assessment: 'Assess evidence and validate attribution'
+};
 
-const exitCode = await new Promise((resolveExit) => {
-  const child = spawn('codex', args, { cwd: rootDir, stdio: ['ignore', 'inherit', 'inherit'] });
+function startPhase(id) {
+  const existing = investigationSteps.find((phase) => phase.id === id);
+  if (existing) return progressQueue;
+  for (const phase of investigationSteps) {
+    if (phase.status === 'running') phase.status = 'complete';
+  }
+  investigationSteps.push({ id, label: phases[id], status: 'running' });
+  const snapshot = investigationSteps.map((phase) => ({ ...phase }));
+  progressQueue = progressQueue.then(() => postProgress({
+    status: 'running', step: 3, title: 'Kane tests failed · Quiff is investigating',
+    message: 'Quiff is investigating what caused the failure and who may be responsible.',
+    completedSteps: [1], failedSteps: [2], investigationSteps: snapshot
+  }));
+  return progressQueue;
+}
+
+await startPhase('failure');
+
+function handleCodexEvent(event) {
+  if (event?.type !== 'item.started') return;
+  const item = event.item ?? {};
+  const tool = item.tool ?? item.name ?? item.tool_name ?? '';
+  const command = Array.isArray(item.command) ? item.command.join(' ') : (item.command ?? '');
+  if (item.type === 'mcp_tool_call') {
+    if (['search_issues', 'search_pull_requests'].includes(tool)) void startPhase('tickets');
+    else if (['get_pull_request', 'get_pull_request_files', 'get_pull_request_commits', 'compare_commits', 'get_pull_requests_for_commit'].includes(tool)) void startPhase('changes');
+  } else if (item.type === 'command_execution' || item.type === 'local_shell_call') {
+    if (/quiff\/tickets|tickets\/TICKET-/i.test(command)) void startPhase('tickets');
+    else if (/git\s+(show|log|diff)|pull_request|commit/i.test(command)) void startPhase('changes');
+  }
+}
+
+const child = spawn('codex', args, { cwd: rootDir, stdio: ['ignore', 'pipe', 'inherit'] });
+const exitPromise = new Promise((resolveExit) => {
   child.once('error', (error) => {
     process.stderr.write(`Could not start Codex CLI: ${error.message}\n`);
     resolveExit(127);
   });
   child.once('exit', (code, signal) => resolveExit(code ?? (signal ? 1 : 0)));
 });
+const eventLines = createInterface({ input: child.stdout, crlfDelay: Infinity });
+for await (const line of eventLines) {
+  try { handleCodexEvent(JSON.parse(line)); } catch { /* Ignore non-JSON CLI output. */ }
+}
+await progressQueue;
+const exitCode = await exitPromise;
 
 if (exitCode !== 0) {
   await postProgress({
-    status: 'running', step: 6, title: 'Attribution unavailable',
+    status: 'running', step: 3, title: 'Attribution unavailable',
     message: 'Codex could not complete the investigation. The Kane failure remains available in the run artifacts.',
     analysisError: `Codex exited with code ${exitCode}.`
   });
   process.exit(exitCode);
 }
 
+await startPhase('assessment');
+
 let result;
 try {
   result = JSON.parse(await readFile(rawOutputPath, 'utf8'));
 } catch {
   await postProgress({
-    status: 'running', step: 6, title: 'Attribution unavailable',
+    status: 'running', step: 3, title: 'Attribution unavailable',
     message: 'Codex returned a result that could not be parsed as JSON.',
     analysisError: 'Codex response was not valid JSON.'
   });
@@ -107,7 +152,7 @@ const attributionValid = attributed && ['high', 'medium', 'low'].includes(result
 const inconclusiveValid = result.status === 'inconclusive' && result.confidence === 'none' && result.attribution === null;
 if (!commonValid || !(attributionValid || inconclusiveValid)) {
   await postProgress({
-    status: 'running', step: 6, title: 'Attribution unavailable',
+    status: 'running', step: 3, title: 'Attribution unavailable',
     message: 'Codex returned a result that did not match Quiff’s attribution contract.',
     analysisError: 'Codex output failed contract validation.'
   });
@@ -116,12 +161,14 @@ if (!commonValid || !(attributionValid || inconclusiveValid)) {
 
 const finalResultPath = join(absoluteRunDirectory, 'attribution-result.json');
 await writeFile(finalResultPath, `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });
+for (const phase of investigationSteps) phase.status = 'complete';
 const person = attributed ? result.attribution.person.name : null;
 const message = attributed
   ? `Likely change by ${person}; ticket ${result.attribution.ticket.id}, PR #${result.attribution.pull_request.number}.`
   : 'The evidence does not support naming a likely bug introducer.';
 await postProgress({
-  status: 'running', step: 7, title: 'Attribution ready', message,
-  finding: result, analysisError: null
+  status: 'running', step: 3, title: 'Attribution ready', message,
+  finding: result, analysisError: null, investigationSteps,
+  completedSteps: [1, 3], failedSteps: [2]
 });
 process.stdout.write(`\n${message}\nResult saved to ${finalResultPath}\n`);

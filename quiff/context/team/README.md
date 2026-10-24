@@ -24,3 +24,4 @@ For company-scale context simulations, use the [20-person fictional roster](samp
 - Record ownership as areas of responsibility, not assumptions about seniority.
 - Mark planned roles as planned and examples as sample.
 - Update this index when the actual team composition changes.
+- Map a developer's exact GitHub login to their Slack member ID in [slack-identities.json](slack-identities.json) to allow Quiff to tag them after a failed Kane run. Use the Slack member ID (for example, `U012ABCDEF`), not a display name or email.

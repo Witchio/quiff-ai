@@ -3,3 +3,5 @@
 .testmuai/pipeline-state.json
 .testmuai/pipeline-state.json.*.tmp
 .testmuai/attribution-runs/
+.testmuai/evidence/*.evidence
+.testmuai/tests/output-*/

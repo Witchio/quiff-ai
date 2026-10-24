@@ -5,12 +5,11 @@ QUIFF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ROOT_DIR="$(cd "$QUIFF_DIR/.." && pwd)"
 cd "$QUIFF_DIR"
 
-IMAGE_NAME="signup-app:quiff-check"
-CONTAINER_NAME="signup-quiff-check-$$"
+APP_PID=""
+APP_LOG=""
 PORT=3000
 PROGRESS_PORT=4173
 PROGRESS_URL="http://127.0.0.1:${PROGRESS_PORT}"
-CONTAINER_STARTED=0
 PROGRESS_PID=""
 PIPELINE_STARTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
@@ -46,7 +45,7 @@ start_progress_dashboard() {
   elif command -v xdg-open >/dev/null 2>&1; then
     xdg-open "$PROGRESS_URL" >/dev/null 2>&1 || true
   fi
-  progress running 1 'Check prerequisites' 'Confirm Docker, Kane CLI, and the local port are ready.'
+  progress running 1 'Starting app' 'Checking Node.js, Kane CLI, and the local port.'
 }
 
 print_command() {
@@ -74,54 +73,46 @@ cleanup() {
   local progress_extra=''
   trap - EXIT
 
-  progress running 7 'Clean up' 'Remove the temporary app container.'
-
-  if [[ "$CONTAINER_STARTED" == "1" ]]; then
-    if (( status != 0 )); then
-      printf '\n[cleanup] App container logs (pipeline failed):\n'
-      docker logs "$CONTAINER_NAME" || true
+  if [[ -n "$APP_PID" ]]; then
+    if (( status != 0 )) && [[ -n "$APP_LOG" && -f "$APP_LOG" ]]; then
+      printf '\n[cleanup] Development server output (pipeline failed):\n'
+      tail -n 80 "$APP_LOG" || true
     fi
-    printf '\n[cleanup] Stop and remove app container\n'
-    print_command docker rm --force "$CONTAINER_NAME"
-    docker rm --force "$CONTAINER_NAME" >/dev/null || true
+    printf '\n[cleanup] Stop local development server\n'
+    kill "$APP_PID" >/dev/null 2>&1 || true
+    wait "$APP_PID" 2>/dev/null || true
   fi
 
   if (( status == 0 )); then
     printf '\nLocal pipeline completed successfully.\n'
-    completed_steps='[1,2,3,4,5,7]'
-    skipped_steps='[6]'
-    progress success 7 'Pipeline completed' 'All Kane checks passed; failure attribution was not needed.' "\"completedSteps\":${completed_steps},\"failedSteps\":${failed_steps},\"skippedSteps\":${skipped_steps}"
+    completed_steps='[1,2]'
+    progress success 2 'Pipeline completed' 'All Kane checks passed; no investigation was needed.' "\"completedSteps\":${completed_steps},\"failedSteps\":${failed_steps}"
   else
     printf '\nLocal pipeline failed with exit code %s.\n' "$status" >&2
     if (( KANE_FAILED == 1 )); then
-      completed_steps='[1,2,3,4,7]'
-      failed_steps='[5]'
+      failed_steps='[2]'
       if (( ANALYSIS_COMPLETED == 1 )); then
-        completed_steps='[1,2,3,4,6,7]'
-        progress_title='Kane failed · attribution ready'
-        progress_message='The Kane tests failed. Codex saved an evidence-based attribution result.'
+        completed_steps='[1,3]'
+        progress_title='Kane tests failed · investigation complete'
+        progress_message='Quiff finished investigating the failure. See the findings and Slack notification status below.'
       elif (( ANALYSIS_FAILED == 1 )); then
-        failed_steps='[5,6]'
-        progress_title='Kane failed · attribution unavailable'
-        progress_message='The Kane tests failed and Codex could not complete attribution. See the run artifacts and terminal output.'
+        failed_steps='[2,3]'
+        completed_steps='[1]'
+        progress_title='Kane tests failed · investigation incomplete'
+        progress_message='Quiff could not complete the investigation. See the run artifacts and Slack notification status below.'
+      else
+        completed_steps='[1]'
       fi
     else
-      failed_steps="[${CURRENT_STEP}]"
-      if (( CURRENT_STEP > 1 )); then
-        local step
-        completed_steps='['
-        for ((step = 1; step < CURRENT_STEP; step++)); do
-          [[ "$completed_steps" == '[' ]] || completed_steps+=','
-          completed_steps+="$step"
-        done
-        completed_steps+=']'
-      fi
-      if [[ "$completed_steps" == '[]' ]]; then completed_steps='[7]'; else completed_steps="${completed_steps%]},7]"; fi
+      failed_steps='[1]'
     fi
     progress_extra="\"completedSteps\":${completed_steps},\"failedSteps\":${failed_steps},\"skippedSteps\":${skipped_steps}"
-    progress failed 7 "$progress_title" "$progress_message" "$progress_extra"
+    local final_step=1
+    if (( KANE_FAILED == 1 )); then final_step=3; fi
+    progress failed "$final_step" "$progress_title" "$progress_message" "$progress_extra"
   fi
   if [[ -n "$KANE_LOG" && -f "$KANE_LOG" ]]; then rm -f -- "$KANE_LOG"; fi
+  if [[ -n "$APP_LOG" && -f "$APP_LOG" ]]; then rm -f -- "$APP_LOG"; fi
   if [[ -n "$PROGRESS_PID" ]]; then
     kill "$PROGRESS_PID" >/dev/null 2>&1 || true
     wait "$PROGRESS_PID" 2>/dev/null || true
@@ -134,20 +125,17 @@ KANE_LOG="$(mktemp "${TMPDIR:-/tmp}/quiff-kane.XXXXXX")"
 
 start_progress_dashboard
 
-printf 'Quiff local Docker + Kane check\n'
-printf 'Repository: %s\n' "$ROOT_DIR"
-printf 'Image: %s\nContainer: %s\nApp URL: http://localhost:%s\n' "$IMAGE_NAME" "$CONTAINER_NAME" "$PORT"
+printf 'Quiff local npm + Kane check\n'
+printf 'Repository: %s\nApp URL: http://localhost:%s\n' "$ROOT_DIR" "$PORT"
 
 printf '\n[1] Check prerequisites and port\n'
 CURRENT_STEP=1
-for command_name in docker curl npm kane-cli git node codex gh; do
+for command_name in curl npm kane-cli git node codex gh; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     printf 'Missing required command: %s\n' "$command_name" >&2
     exit 1
   fi
 done
-print_command docker info
-docker info >/dev/null
 print_command env KANE_CLI_USER_AGENT=codex kane-cli --version
 KANE_CLI_USER_AGENT=codex kane-cli --version
 if command -v lsof >/dev/null 2>&1 && lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
@@ -174,17 +162,18 @@ else
 fi
 if [[ -n "$(git -C "$ROOT_DIR" status --porcelain --untracked-files=all)" ]]; then WORKTREE_CLEAN=false; fi
 
-CURRENT_STEP=2
-progress running 2 'Build app image' 'Create the Docker image for the signup app.'
-run_step 2 'Build the login/signup app Docker image' docker build --file "$QUIFF_DIR/ci/Dockerfile" --tag "$IMAGE_NAME" "$ROOT_DIR"
-CURRENT_STEP=3
-progress running 3 'Start app container' 'Launch the app for the browser checks.'
-run_step 3 'Start the app container' docker run --detach --name "$CONTAINER_NAME" --publish "$PORT:3000" "$IMAGE_NAME"
-CONTAINER_STARTED=1
-
-printf '\n[4] Wait for the app health check\n'
-CURRENT_STEP=4
-progress running 4 'Wait for app health' 'Checking that the app responds at localhost:3000.'
+CURRENT_STEP=1
+progress running 1 'Starting app' 'Starting the Next.js development server with npm run dev.'
+APP_LOG="$(mktemp "${TMPDIR:-/tmp}/quiff-app.XXXXXX")"
+printf '\n[1] Start app with npm run dev\n'
+printf '    + (cd %q && npm run dev -- --hostname 127.0.0.1 --port %q)\n' "$ROOT_DIR" "$PORT"
+cd "$ROOT_DIR"
+npm run dev -- --hostname 127.0.0.1 --port "$PORT" >"$APP_LOG" 2>&1 &
+APP_PID=$!
+cd "$QUIFF_DIR"
+printf '\n[1] Wait for the app health check\n'
+CURRENT_STEP=1
+progress running 1 'Starting app' 'Waiting for the signup app to respond at localhost:3000.'
 printf '    + curl --fail --silent --show-error http://127.0.0.1:%s/\n' "$PORT"
 ready=0
 for attempt in {1..30}; do
@@ -201,9 +190,9 @@ if [[ "$ready" != "1" ]]; then
 fi
 printf 'App is responding at http://localhost:%s.\n' "$PORT"
 
-CURRENT_STEP=5
-progress running 5 'Run saved Kane tests' 'Run the end-to-end checks against the app.'
-printf '\n[5] Run Quiff saved Kane tests headlessly\n'
+CURRENT_STEP=2
+progress running 2 'Run Kane tests' 'Run the saved signup tests in parallel.' '"completedSteps":[1]'
+printf '\n[2] Run Quiff saved Kane tests headlessly\n'
 print_command npm run test:kane
 set +e
 npm run test:kane 2>&1 | tee "$KANE_LOG" | node "$QUIFF_DIR/ci/stream-kane-progress.mjs" "$PROGRESS_URL"
@@ -213,22 +202,25 @@ set -e
 if (( KANE_STATUS != 0 )); then
   KANE_FAILED=1
   RUN_DIR="$QUIFF_DIR/.testmuai/attribution-runs/$RUN_ID"
-  CURRENT_STEP=6
-  progress running 6 'Investigate the failure' 'Prepare failure details and run Codex attribution.'
+  CURRENT_STEP=3
+  progress running 3 'Kane tests failed · Quiff is investigating' 'Quiff is investigating what caused the failure and who may be responsible.' '"completedSteps":[1],"failedSteps":[2],"investigationSteps":[{"id":"failure","label":"Review Kane failure evidence","status":"running"}]'
   if ! node "$QUIFF_DIR/ci/prepare-failure-input.mjs" \
     "$RUN_ID" "$RUN_DIR" "$KANE_LOG" "$KANE_STATUS" \
     "$BRANCH_NAME" "$TESTED_SHA" "$PIPELINE_STARTED_AT" \
     "$REPOSITORY_NAME" "$REPOSITORY_URL" "$WORKTREE_CLEAN"; then
     ANALYSIS_FAILED=1
     printf 'Could not prepare the Codex failure input.\n' >&2
-    exit "$KANE_STATUS"
-  fi
-  progress running 6 'Investigate the failure' 'Run Codex attribution using the Kane output and QA change context.'
-  if node "$QUIFF_DIR/ci/run-attribution.mjs" "$RUN_ID" "$RUN_DIR" "$PROGRESS_URL"; then
-    ANALYSIS_COMPLETED=1
   else
-    ANALYSIS_FAILED=1
-    printf 'Codex attribution failed; see the pipeline log and run artifacts.\n' >&2
+    progress running 3 'Kane tests failed · Quiff is investigating' 'Reviewing the failure evidence and tracing the source ticket, PR, and code change.'
+    if node "$QUIFF_DIR/ci/run-attribution.mjs" "$RUN_ID" "$RUN_DIR" "$PROGRESS_URL"; then
+      ANALYSIS_COMPLETED=1
+    else
+      ANALYSIS_FAILED=1
+      printf 'Codex attribution failed; see the pipeline log and run artifacts.\n' >&2
+    fi
+  fi
+  if ! node "$QUIFF_DIR/ci/notify-slack.mjs" "$RUN_ID" "$RUN_DIR" "$PROGRESS_URL"; then
+    printf 'Slack notification could not be delivered.\n' >&2
   fi
   exit "$KANE_STATUS"
 fi
