@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test:kane": "KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent < /dev/null"
+    "test:kane": "KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless < /dev/null"
   },
   "dependencies": {
     "next": "^15.0.0",

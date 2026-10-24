@@ -20,7 +20,7 @@ Project context is separated by product: [`context/company/`](context/company/RE
 
 ## Run Kane tests
 
-With `kane-cli` installed and authenticated, run all saved Kane tests from the project root:
+With `kane-cli` installed and authenticated, run all saved Kane tests headlessly from the project root:
 
 ```bash
 npm run test:kane
