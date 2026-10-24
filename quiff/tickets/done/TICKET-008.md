@@ -3,7 +3,7 @@
 **Team:** Backend
 **Type:** Validation
 **Assignee:** witchio
-**Status:** todo
+**Status:** done
 
 ## Description
 

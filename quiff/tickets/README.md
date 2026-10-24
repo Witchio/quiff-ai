@@ -2,14 +2,14 @@
 
 This directory contains 50 fictional tickets for the signup app and company work. Each ticket is planning data; marking a ticket done records its board status and does not claim that every described task is implemented.
 
-Current board: 28 todo, 22 done. Tickets are stored in folders matching their status.
+Current board: 26 todo, 24 done. Tickets are stored in folders matching their status.
 
 ## Todo
 
 - [004 — Resend a signup verification email](todo/TICKET-004.md) (Feature) — **Assignee: Samira Patel**
 - [006 — Make the signup form fully keyboard accessible](todo/TICKET-006.md) (Improvement) — **Assignee: Alex Morgan**
-- [007 — Require at least 10 characters in signup fields on the frontend](todo/TICKET-007.md) (Validation) — **Assignee: witchio**
-- [008 — Require at least 10 characters in signup fields on the backend](todo/TICKET-008.md) (Validation) — **Assignee: witchio**
+- [007 — Require at least 10 characters in signup fields on the frontend](done/TICKET-007.md) (Validation) — **Assignee: witchio**
+- [008 — Require at least 10 characters in signup fields on the backend](done/TICKET-008.md) (Validation) — **Assignee: witchio**
 - [010 — Add structured signup error logging](todo/TICKET-010.md) (Maintenance) — **Assignee: Samira Patel**
 - [012 — Rewrite signup email copy](todo/TICKET-012.md) (Content) — **Assignee: Oliver Grant**
 - [013 — Write a new-user onboarding guide](todo/TICKET-013.md) (Documentation) — **Assignee: Ethan Cole**
@@ -62,7 +62,5 @@ Current board: 28 todo, 22 done. Tickets are stored in folders matching their st
 
 ## Planned signup length requirements
 
-- [TICKET-007](todo/TICKET-007.md) requires the frontend to block signup when username or password has fewer than 10 characters.
-- [TICKET-008](todo/TICKET-008.md) requires the backend to independently reject either value below 10 characters.
-
-These tickets track a planned change; the app currently enforces an 8-character minimum.
+- [TICKET-007](done/TICKET-007.md) tracks the frontend validation change.
+- [TICKET-008](done/TICKET-008.md) tracks the backend validation change.

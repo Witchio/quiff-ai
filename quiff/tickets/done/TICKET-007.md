@@ -3,7 +3,7 @@
 **Team:** Frontend
 **Type:** Validation
 **Assignee:** witchio
-**Status:** todo
+**Status:** done
 
 ## Description
 
