@@ -8,36 +8,12 @@
   "session_name": "login-check",
   "executions": [
     {
-      "execution_id": "c9c1625e-05c5-45ac-b64f-20df16e6e19b",
-      "run_kind": "replay",
-      "status": "passed",
+      "execution_id": "e628b9dc-d5ec-4e3c-b845-827129d80f69",
+      "run_kind": "author",
+      "status": "failed",
       "valid": true,
       "uploaded": true,
-      "at": "2026-10-24T19:36:03.067Z"
-    },
-    {
-      "execution_id": "a0455369-fe10-4a15-b02f-71b924c9f0d5",
-      "run_kind": "replay",
-      "status": "passed",
-      "valid": true,
-      "uploaded": true,
-      "at": "2026-10-24T19:39:57.146Z"
-    },
-    {
-      "execution_id": "eb0fccf2-1c76-439c-8eb8-581a0fb32ff2",
-      "run_kind": "replay",
-      "status": "passed",
-      "valid": true,
-      "uploaded": true,
-      "at": "2026-10-24T19:56:22.542Z"
-    },
-    {
-      "execution_id": "979b0f73-5b80-4a22-b56f-a82566334b45",
-      "run_kind": "replay",
-      "status": "passed",
-      "valid": true,
-      "uploaded": true,
-      "at": "2026-10-24T20:07:39.448Z"
+      "at": "2026-10-24T22:06:38.554Z"
     }
   ]
 }
