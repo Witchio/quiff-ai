@@ -1,0 +1,67 @@
+{
+  "start_url": {
+    "value": "http://localhost:3000",
+    "secret": false,
+    "description": "Starting URL of the signup demo page; must be filled before browser tests run."
+  },
+  "signup_username_8": {
+    "value": "signup01",
+    "secret": false,
+    "description": "Test username exactly eight characters after trimming; not a fixed credential embedded in the product."
+  },
+  "signup_email": {
+    "value": "signup-test@example.com",
+    "secret": false,
+    "description": "Valid test email address for signup requests."
+  },
+  "signup_password_9": {
+    "value": "",
+    "secret": true,
+    "description": "Test password exactly nine raw characters for server rejection; do not trim."
+  },
+  "signup_password_10": {
+    "value": "Pass1234!!",
+    "secret": true,
+    "description": "Test password exactly ten raw characters for the accepted path; do not trim."
+  },
+  "signup_username_10": {
+    "value": "signupuser01",
+    "secret": false,
+    "description": "A signup username of at least 10 and at most 64 characters for browser regression fixtures; no fixed demo credential."
+  },
+  "signup_password_8": {
+    "value": "Pass123!",
+    "secret": true,
+    "description": "Exactly eight-character password for browser rejection; not a real account password."
+  },
+  "signup_username_7": {
+    "value": "",
+    "secret": false,
+    "description": "Exactly seven-character username for browser and direct API rejection."
+  },
+  "signup_mismatched_confirmation_10": {
+    "value": "",
+    "secret": true,
+    "description": "Ten-character confirmation different from signup_password_10."
+  },
+  "signup_username_65": {
+    "value": "",
+    "secret": false,
+    "description": "Exactly 65-character username for direct API maximum-length rejection."
+  },
+  "signup_password_129": {
+    "value": "",
+    "secret": true,
+    "description": "Exactly 129-character password for direct API maximum-length rejection."
+  },
+  "signup_username_64": {
+    "value": "",
+    "secret": false,
+    "description": "Exactly 64-character username for valid upper-bound browser signup."
+  },
+  "signup_password_128": {
+    "value": "",
+    "secret": true,
+    "description": "Exactly 128-character password for valid upper-bound browser signup."
+  }
+}

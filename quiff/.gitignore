@@ -1,2 +1,5 @@
 # kane-cli context store: shared through a location, never merged with git
 .context/
+.testmuai/pipeline-state.json
+.testmuai/pipeline-state.json.*.tmp
+.testmuai/attribution-runs/
