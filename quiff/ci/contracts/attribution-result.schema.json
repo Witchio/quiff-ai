@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quiff.local/schemas/attribution-result.schema.json",
+  "title": "Quiff bug attribution result",
+  "description": "Evidence-backed attribution from Codex. This is an investigative finding, not a judgment of fault.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "status", "confidence", "summary", "attribution", "evidence", "alternatives", "gaps"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["attributed", "inconclusive"] },
+    "confidence": { "enum": ["high", "medium", "low", "none"] },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Concise conclusion; do not include hidden chain-of-thought."
+    },
+    "attribution": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["person", "ticket", "pull_request", "change"],
+          "properties": {
+            "person": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "github_login"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "github_login": { "type": ["string", "null"] }
+              }
+            },
+            "ticket": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "title", "reference"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "title": { "type": "string", "minLength": 1 },
+                "reference": { "type": "string", "minLength": 1, "description": "URL or repository-relative path to the ticket."
+                }
+              }
+            },
+            "pull_request": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["number", "title", "url"],
+              "properties": {
+                "number": { "type": "integer", "minimum": 1 },
+                "title": { "type": "string", "minLength": 1 },
+                "url": { "type": "string", "format": "uri" }
+              }
+            },
+            "change": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["commit_sha", "files"],
+              "properties": {
+                "commit_sha": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" },
+                "files": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "reference", "supports"],
+        "properties": {
+          "source": { "enum": ["kane", "ticket", "pull_request", "commit", "diff", "git_history"] },
+          "reference": { "type": "string", "minLength": 1, "description": "URL, ticket ID, commit SHA, or artifact path."
+          },
+          "supports": { "type": "string", "minLength": 1, "description": "Brief factual link between the evidence and the conclusion."
+          }
+        }
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate", "reason"],
+        "properties": {
+          "candidate": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "gaps": { "type": "array", "items": { "type": "string" } }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "attributed" } } },
+      "then": {
+        "properties": {
+          "confidence": { "enum": ["high", "medium", "low"] },
+          "attribution": { "type": "object" },
+          "evidence": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "inconclusive" } } },
+      "then": {
+        "properties": {
+          "confidence": { "const": "none" },
+          "attribution": { "type": "null" }
+        }
+      }
+    }
+  ]
+}

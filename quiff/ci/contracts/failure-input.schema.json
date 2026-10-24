@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quiff.local/schemas/failure-input.schema.json",
+  "title": "Quiff failure investigation input",
+  "description": "Pipeline metadata and a pointer to the captured Kane failure log.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "repository", "pipeline", "failure"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier for this local pipeline run."
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repository slug, preferably owner/name."
+        },
+        "url": { "type": ["string", "null"], "format": "uri" }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch", "tested_commit_sha", "started_at"],
+      "properties": {
+        "branch": { "type": "string", "minLength": 1 },
+        "tested_commit_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{40}$",
+          "description": "Full Git SHA for the code tested by this run."
+        },
+        "last_passing_commit_sha": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-fA-F]{40}$",
+          "description": "Full SHA of the last passing run on this branch, if known."
+        },
+        "started_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "exit_code", "captured_at", "log_artifact"],
+      "properties": {
+        "source": { "const": "kane" },
+        "exit_code": { "type": "integer", "minimum": 1 },
+        "captured_at": { "type": "string", "format": "date-time" },
+        "summary": {
+          "type": ["string", "null"],
+          "description": "Optional deterministic summary, if Kane provides one. Do not infer one here."
+        },
+        "log_artifact": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to the captured Kane output, relative to the run artifact directory."
+        },
+        "log_truncated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the captured output was shortened."
+        }
+      }
+    }
+  }
+}
