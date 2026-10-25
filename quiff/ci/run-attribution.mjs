@@ -62,10 +62,10 @@ const investigationSteps = [];
 let progressQueue = Promise.resolve();
 let investigationStarted = false;
 const phases = {
-  failure: 'Review Kane failure evidence',
-  tickets: 'Search matching tickets and PRs',
-  changes: 'Trace related commits and code changes',
-  assessment: 'Assess evidence and validate attribution'
+  failure: { label: 'Review Kane failure evidence', detail: 'Read the failed scenario and capture the exact assertion that failed.' },
+  tickets: { label: 'Search matching tickets and PRs', detail: 'Match the failed behavior to repository tickets and linked pull requests.' },
+  changes: { label: 'Trace related commits and code changes', detail: 'Follow the source trail through commits and inspect changed files.' },
+  assessment: { label: 'Assess evidence and validate attribution', detail: 'Compare the code trail with the Kane failure before naming a likely cause.' }
 };
 
 function startPhase(id) {
@@ -74,7 +74,7 @@ function startPhase(id) {
   for (const phase of investigationSteps) {
     if (phase.status === 'running') phase.status = 'complete';
   }
-  investigationSteps.push({ id, label: phases[id], status: 'running' });
+  investigationSteps.push({ id, ...phases[id], status: 'running' });
   const snapshot = investigationSteps.map((phase) => ({ ...phase }));
   progressQueue = progressQueue.then(() => postProgress({
     status: 'running', step: 4, title: 'Investigate failure',

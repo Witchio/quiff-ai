@@ -110,7 +110,8 @@ cleanup() {
         completed_steps='[1]'
       fi
     else
-      failed_steps='[1]'
+      failed_steps="[${CURRENT_STEP}]"
+      if (( CURRENT_STEP > 1 )); then completed_steps='[1]'; fi
     fi
     progress_extra="\"completedSteps\":${completed_steps},\"failedSteps\":${failed_steps},\"skippedSteps\":${skipped_steps}"
     local final_step=1
@@ -202,13 +203,17 @@ printf 'App is responding at http://localhost:%s.\n' "$PORT"
 CURRENT_STEP=2
 progress running 2 'Run Kane tests' 'Run the saved signup tests in parallel.' '"completedSteps":[1]'
 printf '\n[2] Run Quiff saved Kane tests headlessly\n'
-print_command npm run test:kane
+print_command env KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless --parallel 2
 set +e
-npm run test:kane 2>&1 | tee "$KANE_LOG" | node "$QUIFF_DIR/ci/stream-kane-progress.mjs" "$PROGRESS_URL"
+env KANE_CLI_USER_AGENT=codex kane-cli testrun run --agent --headless --parallel 2 < /dev/null 2>&1 | tee "$KANE_LOG" | node "$QUIFF_DIR/ci/stream-kane-progress.mjs" "$PROGRESS_URL"
 KANE_STATUS=${PIPESTATUS[0]}
 set -e
 
 if (( KANE_STATUS != 0 )); then
+  if (( KANE_STATUS != 1 )); then
+    printf 'Kane CLI exited with code %s before reporting a test failure; skipping Codex attribution.\n' "$KANE_STATUS" >&2
+    exit "$KANE_STATUS"
+  fi
   KANE_FAILED=1
   RUN_DIR="$QUIFF_DIR/.testmuai/attribution-runs/$RUN_ID"
   CURRENT_STEP=3

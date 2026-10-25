@@ -1,8 +1,0 @@
-{
-  "name": "quiff-ci-check",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "quiff:tests": "bash ci/pipeline-local.sh"
-  }
-}
